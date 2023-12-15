@@ -1,0 +1,44 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_NeoMatrix.h>
+#include <Adafruit_NeoPixel.h>
+
+#define PIN 6
+#define Rojo 255, 0, 0
+#define Verde 0, 255, 0
+#define Azul 0, 0, 255
+#define Amarillo 255, 255, 0
+#define Rosa 255, 0, 255
+
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
+  NEO_MATRIX_TOP + NEO_MATRIX_LEFT +
+  NEO_MATRIX_ROWS + NEO_MATRIX_PROGRESSIVE,
+  NEO_GRB + NEO_KHZ800);
+
+const uint16_t color[] = {matrix.Color(Verde)};
+const char texto[] = "Hola";
+uint16_t velocidad = 150;
+
+void setup() {
+  matrix.begin();
+  matrix.setTextWrap(false);
+  matrix.setBrightness(5);
+  matrix.setTextColor(color[0]);
+}
+
+void scrollText(const char* text) {
+  int textLength = strlen(text);
+  int xPos = matrix.width();
+  
+  while (xPos >= -(textLength * 6)) {
+    matrix.fillScreen(0);
+    matrix.setCursor(xPos, 1);
+    matrix.print(text);
+    matrix.show();
+    delay(velocidad);
+    xPos--;
+  }
+}
+
+void loop() {
+  scrollText(texto);
+}
